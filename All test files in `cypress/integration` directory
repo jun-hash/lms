@@ -1,0 +1,40 @@
+// Import Cypress
+const cypress = require('cypress')
+
+// Define the tests
+describe('End-to-end tests for the application', () => {
+  beforeEach(() => {
+    // Visit the application
+    cy.visit('/')
+  })
+
+  it('Loads the homepage', () => {
+    // Check if the homepage is loaded
+    cy.url().should('include', '/')
+  })
+
+  it('Navigates to the login page', () => {
+    // Click on the login button
+    cy.get('#login-button').click()
+
+    // Check if the login page is loaded
+    cy.url().should('include', '/login')
+  })
+
+  it('Logs in a user', () => {
+    // Visit the login page
+    cy.visit('/login')
+
+    // Fill in the login form
+    cy.get('#username').type('testuser')
+    cy.get('#password').type('testpassword')
+
+    // Submit the form
+    cy.get('#login-form').submit()
+
+    // Check if the user is redirected to the dashboard
+    cy.url().should('include', '/dashboard')
+  })
+
+  // Add more tests as needed
+})
