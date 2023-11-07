@@ -1,0 +1,36 @@
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+
+// Import the components from the lms/public/js directory
+import Component1 from '../lms/public/js/Component1';
+import Component2 from '../lms/public/js/Component2';
+// ... import all other components
+
+describe('Component1', () => {
+  test('renders Component1 component', () => {
+    render(<Component1 />);
+  });
+
+  // Add more tests as needed for Component1
+});
+
+describe('Component2', () => {
+  test('renders Component2 component', () => {
+    render(<Component2 />);
+  });
+
+  // Add more tests as needed for Component2
+});
+
+// ... add more describe blocks for all other components
+
+// Example of a test for a button click event
+describe('Button', () => {
+  test('calls onClick prop when clicked', () => {
+    const handleClick = jest.fn();
+    const { getByText } = render(<Button onClick={handleClick}>Click Me</Button>);
+    fireEvent.click(getByText('Click Me'));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+});
