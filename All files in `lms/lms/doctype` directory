@@ -1,0 +1,49 @@
+import fs from 'fs';
+import path from 'path';
+
+// Define the directory where the JSON files are located
+const jsonDirectory = path.join(__dirname, 'lms', 'lms', 'doctype');
+
+// Read all files in the directory
+fs.readdir(jsonDirectory, (err, files) => {
+  if (err) {
+    console.error(`Error reading directory: ${err}`);
+    return;
+  }
+
+  // Filter out non-JSON files
+  const jsonFiles = files.filter(file => path.extname(file) === '.json');
+
+  // Process each JSON file
+  jsonFiles.forEach(file => {
+    const filePath = path.join(jsonDirectory, file);
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        console.error(`Error reading file ${file}: ${err}`);
+        return;
+      }
+
+      // Parse the JSON data
+      let jsonData;
+      try {
+        jsonData = JSON.parse(data);
+      } catch (err) {
+        console.error(`Error parsing JSON data from file ${file}: ${err}`);
+        return;
+      }
+
+      // Convert the JSON data to a JavaScript module
+      const jsData = `export default ${JSON.stringify(jsonData, null, 2)};`;
+
+      // Write the JavaScript module to a new file
+      const newFilePath = path.join(jsonDirectory, path.basename(file, '.json') + '.js');
+      fs.writeFile(newFilePath, jsData, 'utf8', err => {
+        if (err) {
+          console.error(`Error writing file ${newFilePath}: ${err}`);
+        } else {
+          console.log(`Successfully converted ${file} to a JavaScript module.`);
+        }
+      });
+    });
+  });
+});
